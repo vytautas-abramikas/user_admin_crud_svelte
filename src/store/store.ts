@@ -3,7 +3,7 @@ import axios from "axios";
 import type { TUser } from "src/types/TUser";
 import type { TState } from "src/types/TState";
 
-export const userStore = writable<TState>({
+const userStore = writable<TState>({
   users: [],
   filterTerm: "",
   userModalMode: "add",
@@ -13,7 +13,7 @@ export const userStore = writable<TState>({
   isVisibleRemoveUserModal: false,
 });
 
-export const filteredUsers = derived(userStore, ($userStore) => {
+const filteredUsers = derived(userStore, ($userStore) => {
   const filterTerm = $userStore.filterTerm.toLowerCase();
   if (filterTerm === "") {
     return $userStore.users;
@@ -28,7 +28,7 @@ export const filteredUsers = derived(userStore, ($userStore) => {
   }
 });
 
-export const fetchUsers = async () => {
+const fetchUsers = async () => {
   try {
     const response = await axios.get<TUser[]>("http://localhost:3001/users");
     userStore.update((state) => ({ ...state, users: response.data }));
@@ -37,7 +37,7 @@ export const fetchUsers = async () => {
   }
 };
 
-export const createUser = async (user: TUser) => {
+const createUser = async (user: TUser) => {
   try {
     const response = await axios.post("http://localhost:3001/users", user);
     userStore.update((state) => ({
@@ -50,7 +50,7 @@ export const createUser = async (user: TUser) => {
   }
 };
 
-export const updateUser = async (updatedUser: TUser) => {
+const updateUser = async (updatedUser: TUser) => {
   try {
     const response = await axios.put(
       `http://localhost:3001/users/${updatedUser.id}`,
@@ -68,7 +68,7 @@ export const updateUser = async (updatedUser: TUser) => {
   }
 };
 
-export const deleteUser = async (userId: string) => {
+const deleteUser = async (userId: string) => {
   try {
     await axios.delete(`http://localhost:3001/users/${userId}`);
     userStore.update((state) => ({
@@ -81,20 +81,20 @@ export const deleteUser = async (userId: string) => {
   }
 };
 
-export const setFilterTerm = (e: KeyboardEvent) => {
+const setFilterTerm = (e: KeyboardEvent) => {
   const target = e.target as HTMLInputElement;
   userStore.update((state) => ({ ...state, filterTerm: target.value }));
 };
 
-export const setUserModalMode = (mode: "add" | "edit") => {
+const setUserModalMode = (mode: "add" | "edit") => {
   userStore.update((state) => ({ ...state, userModalMode: mode }));
 };
 
-export const setSelectedUserId = (id: string) => {
+const setSelectedUserId = (id: string) => {
   userStore.update((state) => ({ ...state, selectedUserId: id }));
 };
 
-export const setModalVisibility = (
+const setModalVisibility = (
   modal: "add" | "edit" | "remove",
   visibility: boolean
 ) => {
@@ -111,3 +111,20 @@ export const setModalVisibility = (
     }
   });
 };
+
+const userContextKey = Symbol("userContext");
+
+const userContext = {
+  userStore,
+  filteredUsers,
+  fetchUsers,
+  createUser,
+  updateUser,
+  deleteUser,
+  setFilterTerm,
+  setUserModalMode,
+  setSelectedUserId,
+  setModalVisibility,
+};
+
+export { userContextKey, userContext };
