@@ -30,7 +30,7 @@ export const filteredUsers = derived(userStore, ($userStore) => {
 
 export const fetchUsers = async () => {
   try {
-    const response = await axios.get<TUser[]>("http://localhost:3002/users");
+    const response = await axios.get<TUser[]>("http://localhost:3001/users");
     userStore.update((state) => ({ ...state, users: response.data }));
   } catch (error) {
     console.error("Error fetching users:", error);
@@ -39,7 +39,7 @@ export const fetchUsers = async () => {
 
 export const createUser = async (user: TUser) => {
   try {
-    const response = await axios.post("http://localhost:3002/users", user);
+    const response = await axios.post("http://localhost:3001/users", user);
     userStore.update((state) => ({
       ...state,
       users: [...state.users, response.data],
@@ -53,7 +53,7 @@ export const createUser = async (user: TUser) => {
 export const updateUser = async (updatedUser: TUser) => {
   try {
     const response = await axios.put(
-      `http://localhost:3002/users/${updatedUser.id}`,
+      `http://localhost:3001/users/${updatedUser.id}`,
       updatedUser
     );
     userStore.update((state) => ({
@@ -70,7 +70,7 @@ export const updateUser = async (updatedUser: TUser) => {
 
 export const deleteUser = async (userId: string) => {
   try {
-    await axios.delete(`http://localhost:3002/users/${userId}`);
+    await axios.delete(`http://localhost:3001/users/${userId}`);
     userStore.update((state) => ({
       ...state,
       users: state.users.filter((user) => user.id !== userId),
