@@ -10,6 +10,7 @@
     "isolatedModules": true,
     "types": ["svelte"],
     "baseUrl": ".",
+    "moduleResolution": "node",
     "paths": {
       "svelte": ["node_modules/svelte"]
     }
