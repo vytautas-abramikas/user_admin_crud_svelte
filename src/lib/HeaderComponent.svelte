@@ -2,6 +2,7 @@
   import { getContext } from "svelte";
   import { userContextKey } from "../store/store";
   import type { TUserContext } from "../types/TUserContext";
+  import { sanitize } from "../utils/sanitize";
 
   const { setFilterTerm, setUserModalMode, setModalVisibility } =
     getContext<TUserContext>(userContextKey);
@@ -9,6 +10,13 @@
   const showAdduserModal = () => {
     setUserModalMode("add");
     setModalVisibility("add", true);
+  };
+
+  const handleInput = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    const sanitizedInput = sanitize(target.value);
+    target.value = sanitizedInput;
+    setFilterTerm(sanitizedInput);
   };
 </script>
 
@@ -27,6 +35,6 @@
     id="searchInput"
     class="border border-gray-300 rounded-lg px-4 py-2 w-1/3 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300"
     placeholder="Filter users..."
-    on:keyup={setFilterTerm}
+    on:input={handleInput}
   />
 </div>

@@ -9,11 +9,11 @@ export type TUserContext = {
   createUser: (user: TUser) => Promise<void>;
   updateUser: (user: TUser) => Promise<void>;
   deleteUser: (id: string) => Promise<void>;
-  setFilterTerm: (e: KeyboardEvent) => void;
+  setFilterTerm: (input: string) => void;
   setUserModalMode: (mode: "add" | "edit") => void;
   setSelectedUserId: (id: string) => void;
   setModalVisibility: (
     modal: "add" | "edit" | "remove",
-    visibility: boolean
+    visibility: boolean,
   ) => void;
 };

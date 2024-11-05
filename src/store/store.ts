@@ -23,7 +23,7 @@ const filteredUsers = derived(userStore, ($userStore) => {
         user.name.toLowerCase().includes(filterTerm) ||
         user.username.toLowerCase().includes(filterTerm) ||
         user.email.toLowerCase().includes(filterTerm) ||
-        user.role.toLowerCase().includes(filterTerm)
+        user.role.toLowerCase().includes(filterTerm),
     );
   }
 });
@@ -54,12 +54,12 @@ const updateUser = async (updatedUser: TUser) => {
   try {
     const response = await axios.put(
       `http://localhost:3001/users/${updatedUser.id}`,
-      updatedUser
+      updatedUser,
     );
     userStore.update((state) => ({
       ...state,
       users: state.users.map((user) =>
-        user.id === updatedUser.id ? response.data : user
+        user.id === updatedUser.id ? response.data : user,
       ),
       isVisibleEditUserModal: false,
     }));
@@ -81,9 +81,8 @@ const deleteUser = async (userId: string) => {
   }
 };
 
-const setFilterTerm = (e: KeyboardEvent) => {
-  const target = e.target as HTMLInputElement;
-  userStore.update((state) => ({ ...state, filterTerm: target.value }));
+const setFilterTerm = (input: string) => {
+  userStore.update((state) => ({ ...state, filterTerm: input }));
 };
 
 const setUserModalMode = (mode: "add" | "edit") => {
@@ -96,7 +95,7 @@ const setSelectedUserId = (id: string) => {
 
 const setModalVisibility = (
   modal: "add" | "edit" | "remove",
-  visibility: boolean
+  visibility: boolean,
 ) => {
   userStore.update((state) => {
     switch (modal) {
